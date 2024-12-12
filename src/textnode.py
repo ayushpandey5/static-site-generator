@@ -21,19 +21,19 @@ class TextNode():
     def __repr__(self):
         return f"TextNode({self.text}, {self.text_type}, {self.url})"
     
-    def text_node_to_html_node(text_node):
-        match text_node.text_type:
-            case TextNodeType.TEXT:
-                return LeafNode('', text_node.text)
-            case TextNodeType.BOLD:
-                return LeafNode('b', text_node.text)
-            case TextNodeType.ITALIC:
-                return LeafNode('i', text_node.text)
-            case TextNodeType.CODE:
-                return LeafNode('code', text_node.text)
-            case TextNodeType.LINK:
-                return LeafNode('a', text_node.text, {"href": f'"{text_node.url}"'})
-            case TextNodeType.IMAGE:
-                return LeafNode('img', "", {"src": f'"{text_node.url}"', "alt": f'"{text_node.text}"'})
-            case _:
-                raise ValueError(f"Invalid type: {text_node.text_type}")
+def text_node_to_html_node(text_node):
+    match text_node.text_type:
+        case TextNodeType.TEXT:
+            return LeafNode('', text_node.text)
+        case TextNodeType.BOLD:
+            return LeafNode('b', text_node.text)
+        case TextNodeType.ITALIC:
+            return LeafNode('i', text_node.text)
+        case TextNodeType.CODE:
+            return LeafNode('code', text_node.text)
+        case TextNodeType.LINK:
+            return LeafNode('a', text_node.text, {"href": f'"{text_node.url}"'})
+        case TextNodeType.IMAGE:
+            return LeafNode('img', "", {"src": f'"{text_node.url}"', "alt": f'"{text_node.text}"'})
+        case _:
+            raise ValueError(f"Invalid type: {text_node.text_type}")
