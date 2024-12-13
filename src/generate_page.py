@@ -9,7 +9,6 @@ def extract_title(markdown):
 
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    
     from_file = open(from_path, 'r')
     markdown = from_file.read()
     from_file.close()
@@ -27,12 +26,8 @@ def generate_page(from_path, template_path, dest_path):
     template = template.replace("{{ Content }}", html)
 
     dest_dir_path = os.path.dirname(dest_path)
-    print(dest_dir_path)
     if dest_dir_path != "":
         os.makedirs(dest_dir_path, exist_ok=True)
     write = open(dest_path, 'w')
     write.write(template)
     write.close()
-    
-
-generate_page('./content/index.md', './template.html', './public/index.html')    
