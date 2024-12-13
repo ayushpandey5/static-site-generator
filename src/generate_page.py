@@ -1,4 +1,5 @@
 from block_markdown import markdown_to_html_node
+import os
 
 def extract_title(markdown):
     for line in markdown.split('\n'):
@@ -19,7 +20,19 @@ def generate_page(from_path, template_path, dest_path):
 
     node = markdown_to_html_node(markdown)
     html = node.to_html()
-    print(html)
 
-generate_page('./content/index.md', './template.html', './public')
+    title = extract_title(markdown)
+
+    template = template.replace("{{ Title }}", title)
+    template = template.replace("{{ Content }}", html)
+
+    dest_dir_path = os.path.dirname(dest_path)
+    print(dest_dir_path)
+    if dest_dir_path != "":
+        os.makedirs(dest_dir_path, exist_ok=True)
+    write = open(dest_path, 'w')
+    write.write(template)
+    write.close()
     
+
+generate_page('./content/index.md', './template.html', './public/index.html')    
