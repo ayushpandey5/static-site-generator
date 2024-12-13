@@ -122,4 +122,4 @@ def markdown_to_html_node(markdown):
     for block in blocks:
         html_node = block_to_html_node(block)
         childrens.append(html_node)
-    return ParentNode('div', childrens)        
+    return ParentNode('div', childrens)
