@@ -1,5 +1,6 @@
 from block_markdown import markdown_to_html_node
 import os
+from pathlib import Path
 
 def extract_title(markdown):
     for line in markdown.split('\n'):
@@ -23,20 +24,19 @@ def generate_page(from_path, template_path, dest_path):
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
 
-    dest_file = os.path.join(dest_path, "index.html")    
-    write = open(dest_file, 'w')
-    write.write(template)
-    write.close()
+    dest_dir_path = os.path.dirname(dest_path)
+
+    os.makedirs(dest_dir_path, exist_ok=True)
+    with open(dest_path, 'w') as dest_file:
+        dest_file.write(template)
 
 
-def generate_pages_recursive(dir_path, template_path, dest_path):
-    files_list = os.listdir(dir_path)
-    for file in files_list:
-        full_path = os.path.join(dir_path, file)
-        if os.path.isfile(full_path):
-            print(f"Processing file {file}")
-            generate_page(full_path, template_path, dest_path)
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    for filename in os.listdir(dir_path_content):
+        from_path = os.path.join(dir_path_content, filename)
+        dest_path = os.path.join(dest_dir_path, filename)
+        if os.path.isfile(from_path):
+            dest_path = Path(dest_path).with_suffix(".html")
+            generate_page(from_path, template_path, dest_path)
         else:
-            print(f"Directory found: {file}. Recursively processing.")
-            os.makedirs(os.path.join(dest_path, file), exist_ok=True)
-            generate_pages_recursive(full_path, template_path, dest_path)
+            generate_pages_recursive(from_path, template_path, dest_path)
