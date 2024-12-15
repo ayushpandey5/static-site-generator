@@ -11,7 +11,7 @@ def main():
     static_path = os.path.join(base_path, 'static')
     dest_path = os.path.join(base_path, 'public')
     copy_file(static_path, dest_path)
-    generate_page('./content/index.md', './template.html', './public/index.html')
+    generate_pages_recursive('./content', './template.html', dest_path)
         
 
 def copy_file(source_path, dest_path):

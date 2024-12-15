@@ -9,13 +9,11 @@ def extract_title(markdown):
 
 def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    from_file = open(from_path, 'r')
-    markdown = from_file.read()
-    from_file.close()
+    with open(from_path, 'r') as from_file:
+        markdown = from_file.read()
 
-    template_file = open(template_path, 'r')
-    template = template_file.read()
-    template_file.close()
+    with open(template_path, 'r') as template_file:
+        template = template_file.read()
 
     node = markdown_to_html_node(markdown)
     html = node.to_html()
@@ -25,9 +23,20 @@ def generate_page(from_path, template_path, dest_path):
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
 
-    dest_dir_path = os.path.dirname(dest_path)
-    if dest_dir_path != "":
-        os.makedirs(dest_dir_path, exist_ok=True)
-    write = open(dest_path, 'w')
+    dest_file = os.path.join(dest_path, "index.html")    
+    write = open(dest_file, 'w')
     write.write(template)
     write.close()
+
+
+def generate_pages_recursive(dir_path, template_path, dest_path):
+    files_list = os.listdir(dir_path)
+    for file in files_list:
+        full_path = os.path.join(dir_path, file)
+        if os.path.isfile(full_path):
+            print(f"Processing file {file}")
+            generate_page(full_path, template_path, dest_path)
+        else:
+            print(f"Directory found: {file}. Recursively processing.")
+            os.makedirs(os.path.join(dest_path, file), exist_ok=True)
+            generate_pages_recursive(full_path, template_path, dest_path)
