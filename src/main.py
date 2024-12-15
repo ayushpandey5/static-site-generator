@@ -24,4 +24,5 @@ def copy_file(source_path, dest_path):
             os.mkdir(os.path.join(dest_path, f'{file}'))
             copy_file(file_path, os.path.join(dest_path, f'{file}'))
     
-main()
+if __name__ == "__main__":
+    main()
